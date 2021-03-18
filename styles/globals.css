@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+  box-sizing: border-box !important;
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
+  scroll-behavior: smooth;
+  user-select: none;
+}
+
+html {
+  font-size: 62.5%;
+  overflow-x: hidden;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  padding: 0 205px;
+}
+
+::placeholder{
+  color: #A3AFBF;
+}
+
+.wallet-card, .wallet-card p, .wallet-card svg path {
+  transition: all .5s;
+}
+
+.wallet-card:hover {
+  background-color: #153DA2;
+  transition: all .5s;
+}
+
+.wallet-card:hover p {
+  color: #fff;
+  transition: all .5s;
+}
+
+.wallet-card:hover svg path{
+  fill: rgba(255,255,255,0.3)!important;
+  stroke: #fff!important;
+ transition: all .5s;
+}

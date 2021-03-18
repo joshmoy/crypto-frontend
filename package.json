@@ -1,0 +1,24 @@
+{
+  "name": "crypto-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@chakra-ui/react": "^1.3.4",
+    "@emotion/react": "^11.1.5",
+    "@emotion/styled": "^11.1.5",
+    "axios": "^0.21.1",
+    "framer-motion": "^3.10.5",
+    "next": "10.0.8",
+    "next-auth": "^3.13.0",
+    "react": "17.0.1",
+    "react-code-input": "^3.10.0",
+    "react-dom": "17.0.1",
+    "react-hook-form": "^6.15.4",
+    "react-toastify": "^7.0.3"
+  }
+}
