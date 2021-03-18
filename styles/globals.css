@@ -47,12 +47,19 @@ a {
   transition: all .5s;
 }
 
-.wallet-card:hover p {
+.wallet-active, .wallet-active:hover {
+  background-color: #061C5B;
+  transition: all .5s;
+}
+
+
+
+.wallet-card:hover p, .wallet-active p {
   color: #fff;
   transition: all .5s;
 }
 
-.wallet-card:hover svg path{
+.wallet-card:hover svg path, .wallet-active svg path{
   fill: rgba(255,255,255,0.3)!important;
   stroke: #fff!important;
  transition: all .5s;
