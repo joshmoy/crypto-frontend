@@ -1,10 +1,20 @@
+import { useContext } from "react";
 import { Flex, Text, Box, Image, Avatar } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { Link } from "../utils";
-
+import { Link, ScrollContext, ScrollContextProvider } from "../utils";
+import { getSession, useSession } from "next-auth/client";
 const DashboardNavbar = () => {
+  return (
+    <ScrollContextProvider>
+      <DashboardNavbarChild />
+    </ScrollContextProvider>
+  );
+};
+const DashboardNavbarChild = () => {
+  const { scroll, setScroll } = useContext(ScrollContext);
+  const [session] = useSession();
   const router = useRouter();
-  console.log(router);
+
   return (
     <Box
       zIndex="1000"
@@ -12,11 +22,10 @@ const DashboardNavbar = () => {
       pos="fixed"
       top="0"
       w="100vw"
-      h="224px"
-      pt="45px"
+      className={scroll ? "nav nav-scrolled" : "nav"}
     >
       <Flex className="container" align="center" justify="space-between">
-        <Link href="/">
+        <Link href="/wallet">
           <Image src="/icons/logo-white.svg" />
         </Link>
         <Flex align="center">
@@ -38,12 +47,16 @@ const DashboardNavbar = () => {
             <Link href="/transactions">
               <Text
                 fontFamily="poppins"
-                color={router.pathname === "/transactions" ? "#fff" : "rgba(255, 255, 255, 0.8)"}
+                color={
+                  router.pathname.split("/")[1] === "transactions"
+                    ? "#fff"
+                    : "rgba(255, 255, 255, 0.8)"
+                }
                 fontSize="15px"
                 lineHeight="22px"
                 pb="2px"
-                opacity={router.pathname === "/transactions" ? "1" : "0.8"}
-                borderBottom={router.pathname === "/transactions" && "2px solid #fff"}
+                opacity={router.pathname.split("/")[1] === "transactions" ? "1" : "0.8"}
+                borderBottom={router.pathname.split("/")[1] === "transactions" && "2px solid #fff"}
               >
                 Transactions
               </Text>
@@ -51,13 +64,14 @@ const DashboardNavbar = () => {
           </Flex>
           <Flex align="center" ml="98px">
             <Avatar
-              name="Emmanuel Mang"
+              name={`${session?.user?.first_name} ${session?.user?.last_name}`}
               bgColor="brand.light"
               boxSize="32px"
               color="rgba(255,255,255,0.8)"
               fontFamily="Poppins"
             />
-            {/* <Text
+            {scroll && (
+              <Text
                 fontFamily="poppins"
                 color="rgba(255, 255, 255, 0.8)"
                 opacity="0.8"
@@ -65,22 +79,25 @@ const DashboardNavbar = () => {
                 lineHeight="22px"
                 ml="10px"
               >
-                Emmanuel
-              </Text> */}
+                {session?.user?.first_name}
+              </Text>
+            )}
           </Flex>
         </Flex>
       </Flex>
-      <Text
-        mt="80.5"
-        fontFamily="poppins"
-        color="#fff"
-        fontWeight="500"
-        lineHeight="30px"
-        fontSize="20px"
-        className="container"
-      >
-        Hello, Emmanuel
-      </Text>
+      {!scroll && (
+        <Text
+          mt="80.5"
+          fontFamily="poppins"
+          color="#fff"
+          fontWeight="500"
+          lineHeight="30px"
+          fontSize="20px"
+          className="container"
+        >
+          {router.pathname === "/wallet" ? `Hello, ${session?.user?.first_name}` : "History"}
+        </Text>
+      )}
     </Box>
   );
 };

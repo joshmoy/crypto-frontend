@@ -5,3 +5,7 @@ export * from "./CustomInput";
 export * from "./Footer";
 export * from "./DashboardNavbar";
 export * from "./WalletContent";
+export * from "./Svg";
+export * from "./SendContent";
+export * from "./ReceiveContent";
+export * from "./AddWallet";

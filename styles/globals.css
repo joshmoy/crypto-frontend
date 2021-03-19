@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
 * {
   box-sizing: border-box !important;
@@ -18,7 +18,8 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
+  background-color: #fbfdff;
 }
 
 a {
@@ -34,26 +35,63 @@ a {
   padding: 0 205px;
 }
 
-::placeholder{
-  color: #A3AFBF;
+::placeholder {
+  color: #a3afbf;
 }
 
-.wallet-card, .wallet-card p, .wallet-card svg path {
-  transition: all .5s;
+.wallet-card,
+.wallet-card p,
+.wallet-card svg path {
+  transition: all 0.5s;
 }
 
 .wallet-card:hover {
-  background-color: #153DA2;
-  transition: all .5s;
+  background-color: #153da2;
+  transition: all 0.5s;
 }
 
-.wallet-card:hover p {
+.wallet-active,
+.wallet-active:hover {
+  background-color: #061c5b;
+  transition: all 0.5s;
+}
+
+.wallet-card:hover p,
+.wallet-active p {
   color: #fff;
-  transition: all .5s;
+  transition: all 0.5s;
 }
 
-.wallet-card:hover svg path{
-  fill: rgba(255,255,255,0.3)!important;
-  stroke: #fff!important;
- transition: all .5s;
+.wallet-card:hover svg path,
+.wallet-active svg path {
+  fill: rgba(255, 255, 255, 0.3) !important;
+  stroke: #fff !important;
+  transition: all 0.5s;
+}
+
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nav {
+  height: 224px;
+  transition: all 0.5s;
+  padding-top: 45px;
+}
+
+.nav-scrolled {
+  height: 80px;
+  transition: all 0.5s;
+  padding-top: 20px;
+}
+
+.landing {
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("/icons/bg.jpg");
+  height: 100vh;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
 }

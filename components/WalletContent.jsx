@@ -1,44 +1,50 @@
 import { useState } from "react";
 import { Box, Text, Flex, Image } from "@chakra-ui/react";
 import { Link } from "../utils";
-const WalletContent = () => {
-  const [wallet, setWallet] = useState(true);
+
+import { AddWallet } from "./AddWallet";
+const WalletContent = ({ wallet, setWallet, data }) => {
   return (
     <Box m="48px auto 0" w="345px">
       <Box>
-        <Text
-          fontFamily="Poppins"
-          fontSize="14px"
-          lineHeight="21px"
-          color="brand.gray"
-          opacity="0.8"
-          mb="16px"
-        >
-          Local currency
-        </Text>
-        <Flex
-          w="100%"
-          boxShadow="0px 0px 15px rgba(163, 175, 191, 0.15)"
-          borderRadius="2px"
-          align="center"
-          px="30px"
-          h="88px"
-        >
-          <Flex boxSize="41px" borderRadius="50%" bg="#399B66" align="center" justify="center">
-            <Image src="/icons/newNaira.svg" w="15px" />
-          </Flex>
-          <Box ml="16px">
+        {wallet && (
+          <>
             <Text
               fontFamily="Poppins"
-              fontSize="16px"
-              fontWeight="600"
-              lineHeight="24px"
-              color="brand.dark"
-              mb="6px"
+              fontSize="14px"
+              lineHeight="21px"
+              color="brand.gray"
+              opacity="0.8"
+              mb="16px"
             >
-              ETH 0.0000500
+              Local currency
             </Text>
-            <Text
+
+            <Flex
+              w="100%"
+              boxShadow="0px 0px 15px rgba(163, 175, 191, 0.15)"
+              borderRadius="2px"
+              align="center"
+              px="30px"
+              h="88px"
+            >
+              <Flex boxSize="41px" borderRadius="50%" bg="#399B66" align="center" justify="center">
+                <Text fontFamily="Poppins" fontSize="18px" color="#fff" fontWeight="600">
+                  $
+                </Text>
+              </Flex>
+              <Box ml="16px">
+                <Text
+                  fontFamily="Poppins"
+                  fontSize="16px"
+                  fontWeight="600"
+                  lineHeight="24px"
+                  color="brand.dark"
+                >
+                  USD {data?.balanceInDollars?.toFixed(2)}
+                </Text>
+
+                {/* <Text
               fontFamily="Poppins"
               fontSize="14px"
               fontWeight="500"
@@ -46,9 +52,11 @@ const WalletContent = () => {
               color="#979797"
             >
               NGN 0.0000
-            </Text>
-          </Box>
-        </Flex>
+            </Text> */}
+              </Box>
+            </Flex>
+          </>
+        )}
       </Box>
       <Box mt="40px">
         <Text
@@ -81,11 +89,10 @@ const WalletContent = () => {
                   fontWeight="600"
                   lineHeight="24px"
                   color="brand.dark"
-                  mb="6px"
                 >
-                  ETH 0.0000500
+                  ETH {data?.balance}
                 </Text>
-                <Text
+                {/* <Text
                   fontFamily="Poppins"
                   fontSize="14px"
                   fontWeight="500"
@@ -93,44 +100,12 @@ const WalletContent = () => {
                   color="#979797"
                 >
                   NGN 0.0000
-                </Text>
+                </Text> */}
               </Box>
             </Flex>
           </Link>
         ) : (
-          <Flex
-            w="100%"
-            boxShadow="0px 0px 15px rgba(163, 175, 191, 0.15)"
-            borderRadius="2px"
-            align="center"
-            px="30px"
-            h="88px"
-          >
-            <Flex boxSize="41px" borderRadius="50%" bg="brand.dark" align="center" justify="center">
-              <Image src="/icons/plus.svg" w="15px" />
-            </Flex>
-            <Box ml="16px">
-              <Text
-                fontFamily="Poppins"
-                fontSize="16px"
-                fontWeight="600"
-                lineHeight="24px"
-                color="brand.dark"
-                mb="6px"
-              >
-                Add ETH wallet
-              </Text>
-              <Text
-                fontFamily="Poppins"
-                fontSize="14px"
-                fontWeight="500"
-                lineHeight="21px"
-                color="#979797"
-              >
-                Expand your digital asset
-              </Text>
-            </Box>
-          </Flex>
+          <AddWallet />
         )}
       </Box>
     </Box>

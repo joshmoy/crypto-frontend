@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { useRouter } from "next/router";
 import { InputError, Navbar, Shadows, CustomInput, Footer } from "../components";
 import {
   Box,
@@ -14,30 +14,27 @@ import {
 import { useForm } from "react-hook-form";
 import { login, signUp } from "../queries";
 import { toast } from "react-toastify";
+import { signIn } from "next-auth/client";
 
 const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { register, handleSubmit, errors } = useForm();
   const { register: register2, handleSubmit: handleSubmit2, errors: errors2 } = useForm();
 
-  const onSubmit = async (inputData) => {
+  const router = useRouter();
+  const handleLogin = async (inputData) => {
     try {
       setIsLoading(true);
-      const { message, data } = await login(inputData);
-      toast.success(message || "Login successful");
-      window.localStorage.setItem("auth", data.token);
-      setIsLoading(false);
-
-      setTimeout(() => {
-        window.location.replace(data.hasPin ? "/" : "/confirm");
-      }, 2000);
+      signIn("credentials", {
+        ...inputData,
+        callbackUrl: "http://localhost:3000/confirm",
+      });
     } catch (error) {
-      console.log({ error });
-      toast.error(error.response.data.message || "Login Failed");
+      toast.error(error?.response?.data?.message || "Login Failed");
       setIsLoading(false);
     }
   };
-  const onSubmit2 = async (inputData) => {
+  const handleSignup = async (inputData) => {
     try {
       setIsLoading(true);
       const { message } = await signUp(inputData);
@@ -101,7 +98,7 @@ const Auth = () => {
             </TabList>
             <TabPanels p="33px 24px">
               <TabPanel>
-                <Box as="form" onSubmit={handleSubmit(onSubmit)}>
+                <Box as="form" onSubmit={handleSubmit(handleLogin)}>
                   <FormControl>
                     <CustomInput
                       label="Email"
@@ -158,7 +155,7 @@ const Auth = () => {
                 </Box>
               </TabPanel>
               <TabPanel>
-                <Box as="form" onSubmit={handleSubmit2(onSubmit2)}>
+                <Box as="form" onSubmit={handleSubmit2(handleSignup)}>
                   <FormControl>
                     <CustomInput
                       label="First Name"

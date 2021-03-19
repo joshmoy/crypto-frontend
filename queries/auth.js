@@ -12,8 +12,12 @@ const login = async (body) => {
   return data;
 };
 
-const setPin = async (body) => {
-  const { data } = await instance.post("users/pin", body);
+const setPin = async (body, token) => {
+  const { data } = await instance.post("users/pin", body, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   return data;
 };
