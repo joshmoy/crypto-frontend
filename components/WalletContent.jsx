@@ -7,40 +7,44 @@ const WalletContent = ({ wallet, setWallet, data }) => {
   return (
     <Box m="48px auto 0" w="345px">
       <Box>
-        <Text
-          fontFamily="Poppins"
-          fontSize="14px"
-          lineHeight="21px"
-          color="brand.gray"
-          opacity="0.8"
-          mb="16px"
-        >
-          Local currency
-        </Text>
-        <Flex
-          w="100%"
-          boxShadow="0px 0px 15px rgba(163, 175, 191, 0.15)"
-          borderRadius="2px"
-          align="center"
-          px="30px"
-          h="88px"
-        >
-          <Flex boxSize="41px" borderRadius="50%" bg="#399B66" align="center" justify="center">
-            <Text fontFamily="Poppins" fontSize="18px" color="#fff" fontWeight="600">
-              $
-            </Text>
-          </Flex>
-          <Box ml="16px">
+        {wallet && (
+          <>
             <Text
               fontFamily="Poppins"
-              fontSize="16px"
-              fontWeight="600"
-              lineHeight="24px"
-              color="brand.dark"
+              fontSize="14px"
+              lineHeight="21px"
+              color="brand.gray"
+              opacity="0.8"
+              mb="16px"
             >
-              USD {data?.balanceInDollars}
+              Local currency
             </Text>
-            {/* <Text
+
+            <Flex
+              w="100%"
+              boxShadow="0px 0px 15px rgba(163, 175, 191, 0.15)"
+              borderRadius="2px"
+              align="center"
+              px="30px"
+              h="88px"
+            >
+              <Flex boxSize="41px" borderRadius="50%" bg="#399B66" align="center" justify="center">
+                <Text fontFamily="Poppins" fontSize="18px" color="#fff" fontWeight="600">
+                  $
+                </Text>
+              </Flex>
+              <Box ml="16px">
+                <Text
+                  fontFamily="Poppins"
+                  fontSize="16px"
+                  fontWeight="600"
+                  lineHeight="24px"
+                  color="brand.dark"
+                >
+                  USD {data?.balanceInDollars?.toFixed(2)}
+                </Text>
+
+                {/* <Text
               fontFamily="Poppins"
               fontSize="14px"
               fontWeight="500"
@@ -49,8 +53,10 @@ const WalletContent = ({ wallet, setWallet, data }) => {
             >
               NGN 0.0000
             </Text> */}
-          </Box>
-        </Flex>
+              </Box>
+            </Flex>
+          </>
+        )}
       </Box>
       <Box mt="40px">
         <Text

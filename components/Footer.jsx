@@ -1,7 +1,10 @@
-import { Flex, Text, Box, Image } from "@chakra-ui/react";
+import { Flex, Text, Box, Image, Button } from "@chakra-ui/react";
 import { Link } from "../utils";
+import { signout, signOut } from "next-auth/client";
+import { getSession, useSession } from "next-auth/client";
 
 const Footer = () => {
+  const [session] = useSession();
   return (
     <Box w="100vw" pos="absolute" bottom="0">
       <Flex className="container" h="125px" align="center" justify="space-between">
@@ -14,11 +17,25 @@ const Footer = () => {
               Sell/Receive crypto
             </Text>
           </Link>
-          <Link href="/auth">
-            <Text fontFamily="poppins" color="brand.dark" fontSize="15px" ml="10px" ml="16px">
-              Login/Register
+          {session ? (
+            <Text
+              fontFamily="poppins"
+              color="brand.dark"
+              fontSize="15px"
+              ml="10px"
+              cursor="pointer"
+              ml="16px"
+              onClick={() => signOut({ callbackUrl: "http://localhost:3000/auth" })}
+            >
+              Logout
             </Text>
-          </Link>
+          ) : (
+            <Link href="/auth">
+              <Text fontFamily="poppins" color="brand.dark" fontSize="15px" ml="10px" ml="16px">
+                Login/Register
+              </Text>
+            </Link>
+          )}
         </Flex>
       </Flex>
     </Box>

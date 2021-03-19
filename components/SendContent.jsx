@@ -5,18 +5,23 @@ import { InputError, CustomInput } from "../components";
 import { AddWallet } from "./AddWallet";
 import { transfer } from "../queries";
 import { toast } from "react-toastify";
-const SendContent = ({ wallet, setWallet, handleAdd }) => {
+import { useSession } from "next-auth/client";
+const SendContent = ({ wallet, balance, handleAdd }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { register, handleSubmit, errors, reset } = useForm();
+  const [session] = useSession();
   const onSubmit = async (inputData) => {
-    console.log(inputData, "data");
     try {
-      const res = await transfer(inputData);
-      console.log(res);
-      toast.success("Wallet successfully created");
+      setIsLoading(true);
+      const { data } = await transfer(inputData, session?.user?.token);
+      toast.success(data?.message || "Successful");
       reset();
+      setIsLoading(false);
+      window.location.reload();
     } catch (error) {
-      toast.error(error.message || "Something went wrong");
+      setIsLoading(false);
+      console.log(error);
+      toast.error(error?.message || "Something went wrong");
     }
   };
   return (
@@ -36,7 +41,7 @@ const SendContent = ({ wallet, setWallet, handleAdd }) => {
               lineHeight="48px"
               opacity="0.8"
             >
-              ETH 0.0000
+              ETH {balance}
             </Text>
             <Text
               fontFamily="Poppins"

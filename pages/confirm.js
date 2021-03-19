@@ -9,7 +9,7 @@ import { Box, Text, Button } from "@chakra-ui/react";
 import { toast } from "react-toastify";
 import { getSession, useSession } from "next-auth/client";
 
-const Confirm = () => {
+const Confirm = ({ token }) => {
   const [pin, setPin] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -22,7 +22,7 @@ const Confirm = () => {
     try {
       setIsLoading(true);
       const payload = { pin };
-      const { message } = await setPinApi(payload);
+      const { message } = await setPinApi(payload, token);
       toast.success(message || "Pin successfully set");
       setIsLoading(false);
       setPin("");
@@ -30,7 +30,6 @@ const Confirm = () => {
         router.push("/wallet");
       }, 2000);
     } catch (error) {
-      console.log(error.response, "err");
       toast.error(error.response.data.message || "Something went wrong");
       setIsLoading(false);
     }
@@ -154,6 +153,8 @@ export async function getServerSideProps({ req }) {
   }
 
   return {
-    props: {}, // will be passed to the page component as props
+    props: {
+      ...session.user,
+    }, // will be passed to the page component as props
   };
 }

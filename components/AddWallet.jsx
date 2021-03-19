@@ -1,15 +1,17 @@
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { createWallet } from "../queries";
 import { toast } from "react-toastify";
+import { useSession } from "next-auth/client";
 const AddWallet = () => {
+  const [session] = useSession();
   const handleAdd = async () => {
     try {
-      const res = await createWallet();
-      console.log(res);
-      toast.success("Wallet successfully created");
+      const { data } = await createWallet(session?.user?.token);
+      data.status === 201 ? toast.success("Wallet successfully created") : new Error();
+
+      window.location.reload();
     } catch (error) {
-      console.log({ error });
-      toast.error(error.message || "Something went wrong");
+      toast.error("Something went wrong");
     }
   };
   return (

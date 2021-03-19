@@ -9,9 +9,7 @@ export default NextAuth({
         const { data } = await Axios.post("users/login", { login_details, password });
 
         if (data) {
-          const token = data.data.token;
-          Axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-          const user = { ...data.data, token };
+          const user = { ...data.data, token: data.data.token };
           return user;
         }
 

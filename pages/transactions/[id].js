@@ -1,16 +1,22 @@
 import { Box, Text, Badge, Flex, Image } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { DashboardNavbar } from "../../components";
-import { mock } from "../../data/mock";
 import { useRouter } from "next/router";
 import { Link } from "../../utils";
+import { getTx } from "../../queries";
+import { getSession } from "next-auth/client";
+import { useState, useEffect } from "react";
 
-const SingleTx = () => {
+const SingleTx = ({ data }) => {
   const router = useRouter();
   const { id } = router.query;
-  const check = Number(id) - 1;
-  const dataIdx = mock.findIndex((el, idx) => idx === check);
-  const walletId = window.localStorage.getItem("wallet");
+  const singleTransaction = data.find((el) => el.hash === id);
+
+  const [walletId, setWalletId] = useState(null);
+
+  useEffect(() => {
+    setWalletId(window?.localStorage.getItem("wallet"));
+  }, []);
 
   const {
     value,
@@ -23,7 +29,7 @@ const SingleTx = () => {
     timeStamp,
     fee,
     from,
-  } = mock[dataIdx];
+  } = singleTransaction;
   return (
     <Box>
       <DashboardNavbar />
@@ -169,3 +175,16 @@ const TxValue = styled(Text)`
   color: #061c5b;
   opacity: 0.8;
 `;
+
+export async function getServerSideProps({ req }) {
+  const session = await getSession({ req });
+  const {
+    data: { data },
+  } = await getTx(session.user.token);
+
+  return {
+    props: {
+      data,
+    },
+  };
+}

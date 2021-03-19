@@ -29,16 +29,7 @@ const Auth = () => {
         ...inputData,
         callbackUrl: "http://localhost:3000/confirm",
       });
-      // const { message, data } = await login(inputData);
-      // toast.success(message || "Login successful");
-      // window.localStorage.setItem("auth", data.token);
-      // setIsLoading(false);
-      // console.log(data);
-      // setTimeout(() => {
-      //   router.push(data.hasPin ? "/wallet" : "/confirm");
-      // }, 2000);
     } catch (error) {
-      console.log({ error });
       toast.error(error?.response?.data?.message || "Login Failed");
       setIsLoading(false);
     }

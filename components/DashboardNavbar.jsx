@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { Flex, Text, Box, Image, Avatar } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { Link, ScrollContext, ScrollContextProvider } from "../utils";
-
+import { getSession, useSession } from "next-auth/client";
 const DashboardNavbar = () => {
   return (
     <ScrollContextProvider>
@@ -12,6 +12,7 @@ const DashboardNavbar = () => {
 };
 const DashboardNavbarChild = () => {
   const { scroll, setScroll } = useContext(ScrollContext);
+  const [session] = useSession();
   const router = useRouter();
 
   return (
@@ -63,13 +64,14 @@ const DashboardNavbarChild = () => {
           </Flex>
           <Flex align="center" ml="98px">
             <Avatar
-              name="Emmanuel Mang"
+              name={`${session?.user?.first_name} ${session?.user?.last_name}`}
               bgColor="brand.light"
               boxSize="32px"
               color="rgba(255,255,255,0.8)"
               fontFamily="Poppins"
             />
-            {/* <Text
+            {scroll && (
+              <Text
                 fontFamily="poppins"
                 color="rgba(255, 255, 255, 0.8)"
                 opacity="0.8"
@@ -77,8 +79,9 @@ const DashboardNavbarChild = () => {
                 lineHeight="22px"
                 ml="10px"
               >
-                Emmanuel
-              </Text> */}
+                {session?.user?.first_name}
+              </Text>
+            )}
           </Flex>
         </Flex>
       </Flex>
@@ -92,7 +95,7 @@ const DashboardNavbarChild = () => {
           fontSize="20px"
           className="container"
         >
-          {router.pathname === "/wallet" ? "Hello, Emmanuel" : "History"}
+          {router.pathname === "/wallet" ? `Hello, ${session?.user?.first_name}` : "History"}
         </Text>
       )}
     </Box>

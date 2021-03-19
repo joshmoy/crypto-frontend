@@ -1,27 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, Flex, Text, Image } from "@chakra-ui/react";
 import { Link } from "../../utils/link";
-import {
-  DashboardNavbar,
-  Receive,
-  ReceiveContent,
-  Send,
-  SendContent,
-  WalletContent,
-} from "../../components";
+import { DashboardNavbar } from "../../components";
 import { getTx } from "../../queries";
-import { useQuery } from "react-query";
-import { mock } from "../../data/mock";
-import dayjs from "dayjs";
+import { getSession } from "next-auth/client";
 
-const Transactions = () => {
-  const { isError, isLoading, error, data } = useQuery("getTransactions", getTx);
-  console.log(data?.data?.data);
-  const walletId = window.localStorage.getItem("wallet");
+const Transactions = ({ data }) => {
+  const [walletId, setWalletId] = useState(null);
+
+  useEffect(() => {
+    setWalletId(() => window?.localStorage.getItem("walletId"));
+  }, []);
+
   console.log(walletId);
-  if (isError) {
-    console.log("error is", { error });
-  }
   return (
     <Box pos="relative" minH="100vh" bg="#FBFDFF">
       <DashboardNavbar />
@@ -45,9 +36,9 @@ const Transactions = () => {
             maxH="500px"
             overflowY="scroll"
           >
-            {mock?.map((el, id) => {
+            {data?.map((el, id) => {
               return (
-                <Link href={`/transactions/${id + 1}`} key={id}>
+                <Link href={`/transactions/${el.hash}`} key={id}>
                   <Flex
                     py="24px"
                     align="center"
@@ -118,3 +109,16 @@ const Transactions = () => {
 };
 
 export default Transactions;
+
+export async function getServerSideProps({ req }) {
+  const session = await getSession({ req });
+  const {
+    data: { data },
+  } = await getTx(session.user.token);
+
+  return {
+    props: {
+      data,
+    },
+  };
+}

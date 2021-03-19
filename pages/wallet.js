@@ -9,6 +9,7 @@ import {
   Send,
   SendContent,
   WalletContent,
+  Footer,
 } from "../components";
 import { getBalance } from "../queries";
 import { useQuery } from "react-query";
@@ -21,14 +22,16 @@ const Wallet = (props) => {
     </ScrollContextProvider>
   );
 };
-const WalletChild = ({ balance, balanceInDollars, ethAddress, hasWallet }) => {
+const WalletChild = ({ hasWallet, balance, balanceInDollars, ethAddress }) => {
   const [showWallet, setShowWallet] = useState(true);
   const [showSend, setShowSend] = useState(false);
   const [showReceive, setShowReceive] = useState(false);
   const [wallet, setWallet] = useState(hasWallet);
   const { scroll, setScroll } = useContext(ScrollContext);
-  const [session] = useSession();
 
+  useEffect(() => {
+    window.localStorage.setItem("walletId", ethAddress);
+  }, []);
   const handleShow = (el) => {
     if (el === "wallet") {
       setShowSend(false);
@@ -161,29 +164,37 @@ const WalletChild = ({ balance, balanceInDollars, ethAddress, hasWallet }) => {
               data={{ balance, balanceInDollars }}
             />
           )}
-          {showSend && <SendContent wallet={wallet} setWallet={setWallet} />}
+          {showSend && <SendContent wallet={wallet} balance={balance} />}
           {showReceive && (
             <ReceiveContent wallet={wallet} setWallet={setWallet} walletAddress={ethAddress} />
           )}
         </Box>
       </Box>
+      <Footer />
     </Box>
   );
 };
 
 export default Wallet;
 
-export async function getServerSideProps() {
-  const {
-    data: { data },
-    status,
-  } = await getBalance();
-
-  return {
-    props: {
-      test: true,
-      ...data,
-      hasWallet: status === 200 ? true : false,
-    },
-  };
+export async function getServerSideProps({ req }) {
+  const session = await getSession({ req });
+  try {
+    const data = await getBalance(session.user.token);
+    return {
+      props: {
+        hasWallet: true,
+        ...data.data.data,
+      },
+    };
+  } catch (error) {
+    return {
+      props: {
+        balance: 0,
+        balanceInDollars: 0,
+        ethAddress: "",
+        hasWallet: false,
+      },
+    };
+  }
 }
