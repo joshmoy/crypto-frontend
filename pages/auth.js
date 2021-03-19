@@ -27,7 +27,7 @@ const Auth = () => {
       setIsLoading(true);
       signIn("credentials", {
         ...inputData,
-        callbackUrl: "http://localhost:3000/confirm",
+        callbackUrl: `${process.env.NEXT_PUBLIC_URL}/confirm`,
       });
     } catch (error) {
       toast.error(error?.response?.data?.message || "Login Failed");
