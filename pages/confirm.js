@@ -1,21 +1,39 @@
 import { useState } from "react";
 import { InputError, Navbar, Shadows, CustomInput, Footer } from "../components";
+import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
+import { setPin as setPinApi } from "../queries";
 const ReactCodeInput = dynamic(import("react-code-input"));
 import { Box, Text, Button } from "@chakra-ui/react";
 
 import { toast } from "react-toastify";
+import { getSession, useSession } from "next-auth/client";
 
 const Confirm = () => {
   const [pin, setPin] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
   const handleChange = (value) => {
     setPin(value);
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(pin);
-    setPin("");
+    try {
+      setIsLoading(true);
+      const payload = { pin };
+      const { message } = await setPinApi(payload);
+      toast.success(message || "Pin successfully set");
+      setIsLoading(false);
+      setPin("");
+      setTimeout(() => {
+        router.push("/wallet");
+      }, 2000);
+    } catch (error) {
+      console.log(error.response, "err");
+      toast.error(error.response.data.message || "Something went wrong");
+      setIsLoading(false);
+    }
   };
   const style = {
     border: "none",
@@ -78,6 +96,7 @@ const Confirm = () => {
               inputStyle={style}
               name="pin"
               onChange={handleChange}
+              instanceId="pin"
             />
             <Button
               type="submit"
@@ -111,3 +130,30 @@ const Confirm = () => {
 };
 
 export default Confirm;
+
+// export async function getStaticProps({ req }) {
+//   const session = await getSession({ req });
+
+//   console.log(session);
+
+//   return {
+//     props: {}, // will be passed to the page component as props
+//   };
+// }
+
+export async function getServerSideProps({ req }) {
+  const session = await getSession({ req });
+
+  if (session?.user?.hasPin) {
+    return {
+      redirect: {
+        destination: "/wallet",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {}, // will be passed to the page component as props
+  };
+}

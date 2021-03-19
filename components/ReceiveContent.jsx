@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Box, Input, Flex, Text, useClipboard } from "@chakra-ui/react";
 import { AddWallet } from "./AddWallet";
-const ReceiveContent = ({ wallet, setWallet, handleAdd }) => {
-  const [value, setValue] = useState("asfas-34rtf-safe");
+const ReceiveContent = ({ wallet, setWallet, handleAdd, walletAddress }) => {
+  const [value, setValue] = useState(walletAddress);
   const { hasCopied, onCopy } = useClipboard(value);
   return (
     <Box w="366px" m="0 auto">
@@ -24,28 +24,25 @@ const ReceiveContent = ({ wallet, setWallet, handleAdd }) => {
             Your ETH wallet address
           </Text>
           <Flex h="42px" borderRadius="4px">
-            <Input
+            <Box
               fontSize="14px"
               w="212px"
-              id="amount"
-              name="amount"
-              type="text"
-              isReadOnly
               border="1px solid rgba(6, 28, 91, 0.07)"
               borderRight="none"
               borderTopRightRadius="0"
               borderBottomRightRadius="0"
-              h="42px"
-              p="0 16px"
-              value={value}
+              h="60px"
+              p="10px 16px"
               fontFamily="Poppins"
               color="rgba(6, 28, 91, 0.7)"
               _focus={{ boxShadow: "none" }}
-            />
+            >
+              {value}
+            </Box>
             <Flex
               bgGradient="linear(267.92deg, brand.dark 21.35%, brand.light 77.27%)"
               w="90px"
-              h="42px"
+              h="60px"
               borderTopRightRadius="4px"
               borderBottomRightRadius="4px"
               align="center"

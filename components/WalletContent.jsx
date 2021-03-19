@@ -3,7 +3,7 @@ import { Box, Text, Flex, Image } from "@chakra-ui/react";
 import { Link } from "../utils";
 
 import { AddWallet } from "./AddWallet";
-const WalletContent = ({ wallet, setWallet, handleAdd }) => {
+const WalletContent = ({ wallet, setWallet, data }) => {
   return (
     <Box m="48px auto 0" w="345px">
       <Box>
@@ -26,7 +26,9 @@ const WalletContent = ({ wallet, setWallet, handleAdd }) => {
           h="88px"
         >
           <Flex boxSize="41px" borderRadius="50%" bg="#399B66" align="center" justify="center">
-            <Image src="/icons/newNaira.svg" w="15px" />
+            <Text fontFamily="Poppins" fontSize="18px" color="#fff" fontWeight="600">
+              $
+            </Text>
           </Flex>
           <Box ml="16px">
             <Text
@@ -35,11 +37,10 @@ const WalletContent = ({ wallet, setWallet, handleAdd }) => {
               fontWeight="600"
               lineHeight="24px"
               color="brand.dark"
-              mb="6px"
             >
-              ETH 0.0000500
+              USD {data?.balanceInDollars}
             </Text>
-            <Text
+            {/* <Text
               fontFamily="Poppins"
               fontSize="14px"
               fontWeight="500"
@@ -47,7 +48,7 @@ const WalletContent = ({ wallet, setWallet, handleAdd }) => {
               color="#979797"
             >
               NGN 0.0000
-            </Text>
+            </Text> */}
           </Box>
         </Flex>
       </Box>
@@ -82,11 +83,10 @@ const WalletContent = ({ wallet, setWallet, handleAdd }) => {
                   fontWeight="600"
                   lineHeight="24px"
                   color="brand.dark"
-                  mb="6px"
                 >
-                  ETH 0.0000500
+                  ETH {data?.balance}
                 </Text>
-                <Text
+                {/* <Text
                   fontFamily="Poppins"
                   fontSize="14px"
                   fontWeight="500"
@@ -94,12 +94,12 @@ const WalletContent = ({ wallet, setWallet, handleAdd }) => {
                   color="#979797"
                 >
                   NGN 0.0000
-                </Text>
+                </Text> */}
               </Box>
             </Flex>
           </Link>
         ) : (
-          <AddWallet handleAdd={handleAdd} />
+          <AddWallet />
         )}
       </Box>
     </Box>

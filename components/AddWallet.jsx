@@ -1,5 +1,17 @@
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
-const AddWallet = ({ handleAdd }) => {
+import { createWallet } from "../queries";
+import { toast } from "react-toastify";
+const AddWallet = () => {
+  const handleAdd = async () => {
+    try {
+      const res = await createWallet();
+      console.log(res);
+      toast.success("Wallet successfully created");
+    } catch (error) {
+      console.log({ error });
+      toast.error(error.message || "Something went wrong");
+    }
+  };
   return (
     <Flex
       w="100%"

@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Box, Flex, Text, Image } from "@chakra-ui/react";
-import { Link } from "../utils/link";
-import { toast } from "react-toastify";
+import { Link, ScrollContext, ScrollContextProvider } from "../utils";
+
 import {
   DashboardNavbar,
   Receive,
@@ -10,19 +10,25 @@ import {
   SendContent,
   WalletContent,
 } from "../components";
+import { getBalance } from "../queries";
+import { useQuery } from "react-query";
+import { getSession, useSession } from "next-auth/client";
 
-const Wallet = () => {
+const Wallet = (props) => {
+  return (
+    <ScrollContextProvider>
+      <WalletChild {...props} />
+    </ScrollContextProvider>
+  );
+};
+const WalletChild = ({ balance, balanceInDollars, ethAddress, hasWallet }) => {
   const [showWallet, setShowWallet] = useState(true);
   const [showSend, setShowSend] = useState(false);
   const [showReceive, setShowReceive] = useState(false);
-  const [wallet, setWallet] = useState(false);
+  const [wallet, setWallet] = useState(hasWallet);
+  const { scroll, setScroll } = useContext(ScrollContext);
+  const [session] = useSession();
 
-  const handleAdd = () => {
-    setTimeout(() => {
-      toast.success("Wallet successfully created");
-      setWallet(true);
-    }, 2000);
-  };
   const handleShow = (el) => {
     if (el === "wallet") {
       setShowSend(false);
@@ -38,6 +44,19 @@ const Wallet = () => {
       setShowReceive(true);
     }
   };
+
+  const handleMargin = () => {
+    if (showSend || showReceive) {
+      if (scroll) {
+        return "-220px";
+      } else {
+        return "-100px";
+      }
+    } else {
+      return "0";
+    }
+  };
+
   return (
     <Box pos="relative" minH="100vh" bg="#FBFDFF">
       <DashboardNavbar />
@@ -50,6 +69,8 @@ const Wallet = () => {
             onClick={() => handleShow("wallet")}
             pos="fixed"
             zIndex="2001"
+            mt={scroll && "-120px"}
+            transition="all .2s"
           >
             <Image src="/icons/leftArrow.svg" w="6px" h="10px" />
             <Text
@@ -66,9 +87,9 @@ const Wallet = () => {
         <Box
           pos={showSend || showReceive ? "fixed" : "relative"}
           w="100vw"
-          mt={showSend || showReceive ? "-100px" : "0"}
+          mt={handleMargin}
           zIndex={(showSend || showReceive) && "2000"}
-          transition="all .1s"
+          transition="all .2s"
         >
           <Flex
             border="0.5px solid rgba(163, 175, 191, 0.5)"
@@ -134,11 +155,15 @@ const Wallet = () => {
         </Box>
         <Box pos="relative" mt="100px">
           {showWallet && (
-            <WalletContent wallet={wallet} setWallet={setWallet} handleAdd={handleAdd} />
+            <WalletContent
+              wallet={wallet}
+              setWallet={setWallet}
+              data={{ balance, balanceInDollars }}
+            />
           )}
-          {showSend && <SendContent wallet={wallet} setWallet={setWallet} handleAdd={handleAdd} />}
+          {showSend && <SendContent wallet={wallet} setWallet={setWallet} />}
           {showReceive && (
-            <ReceiveContent wallet={wallet} setWallet={setWallet} handleAdd={handleAdd} />
+            <ReceiveContent wallet={wallet} setWallet={setWallet} walletAddress={ethAddress} />
           )}
         </Box>
       </Box>
@@ -147,3 +172,18 @@ const Wallet = () => {
 };
 
 export default Wallet;
+
+export async function getServerSideProps() {
+  const {
+    data: { data },
+    status,
+  } = await getBalance();
+
+  return {
+    props: {
+      test: true,
+      ...data,
+      hasWallet: status === 200 ? true : false,
+    },
+  };
+}

@@ -3,11 +3,21 @@ import { Box, Flex, Image, Input, Text, FormControl, Button } from "@chakra-ui/r
 import { useForm } from "react-hook-form";
 import { InputError, CustomInput } from "../components";
 import { AddWallet } from "./AddWallet";
+import { transfer } from "../queries";
+import { toast } from "react-toastify";
 const SendContent = ({ wallet, setWallet, handleAdd }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { register, handleSubmit, errors } = useForm();
-  const onSubmit = (inputData) => {
-    console.log(inputData);
+  const { register, handleSubmit, errors, reset } = useForm();
+  const onSubmit = async (inputData) => {
+    console.log(inputData, "data");
+    try {
+      const res = await transfer(inputData);
+      console.log(res);
+      toast.success("Wallet successfully created");
+      reset();
+    } catch (error) {
+      toast.error(error.message || "Something went wrong");
+    }
   };
   return (
     <Box w="366px" m="0 auto">
@@ -103,14 +113,14 @@ const SendContent = ({ wallet, setWallet, handleAdd }) => {
                 label="Recipient's wallet address"
                 id="recipient"
                 type="text"
-                name="recipient"
+                name="to"
                 placeholder="Input address"
                 inputRef={register({
                   required: "Recipient's wallet address is required",
                 })}
               />
             </FormControl>
-            {errors.recipient && <InputError text={errors.recipient.message} />}
+            {errors.to && <InputError text={errors.to.message} />}
             <FormControl mt="16px">
               <CustomInput
                 label="Pin"
