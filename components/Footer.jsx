@@ -25,7 +25,7 @@ const Footer = () => {
               ml="10px"
               cursor="pointer"
               ml="16px"
-              onClick={() => signOut({ callbackUrl: "http://localhost:3000/auth" })}
+              onClick={() => signOut({ callbackUrl: `${process.env.NEXT_PUBLIC_URL}/auth` })}
             >
               Logout
             </Text>
