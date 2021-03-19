@@ -1,6 +1,6 @@
 import { Box, Text, Badge, Flex, Image } from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import { DashboardNavbar } from "../../components";
+import { DashboardNavbar, Footer } from "../../components";
 import { useRouter } from "next/router";
 import { Link } from "../../utils";
 import { getTx } from "../../queries";
@@ -15,7 +15,7 @@ const SingleTx = ({ data }) => {
   const [walletId, setWalletId] = useState(null);
 
   useEffect(() => {
-    setWalletId(window?.localStorage.getItem("wallet"));
+    setWalletId(window?.localStorage.getItem("walletId"));
   }, []);
 
   const {
@@ -31,7 +31,7 @@ const SingleTx = ({ data }) => {
     from,
   } = singleTransaction;
   return (
-    <Box>
+    <Box pos="relative" minH="70vh" bg="#FBFDFF">
       <DashboardNavbar />
       <Box pos="relative" bg="#FBFDFF">
         <Link href="/transactions">
@@ -152,6 +152,7 @@ const SingleTx = ({ data }) => {
           </Box>
         </Box>
       </Box>
+      <Footer />
     </Box>
   );
 };

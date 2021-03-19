@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Box, Flex, Text, Image } from "@chakra-ui/react";
 import { Link } from "../../utils/link";
-import { DashboardNavbar } from "../../components";
+import { DashboardNavbar, Footer } from "../../components";
 import { getTx } from "../../queries";
 import { getSession } from "next-auth/client";
 
@@ -12,9 +12,8 @@ const Transactions = ({ data }) => {
     setWalletId(() => window?.localStorage.getItem("walletId"));
   }, []);
 
-  console.log(walletId);
   return (
-    <Box pos="relative" minH="100vh" bg="#FBFDFF">
+    <Box pos="relative" minH="80vh" bg="#FBFDFF">
       <DashboardNavbar />
       <Box pt="56px" pos="relative" mt="224px">
         <Box m="0 auto" w="750px">
@@ -104,6 +103,7 @@ const Transactions = ({ data }) => {
           </Box>
         </Box>
       </Box>
+      <Footer />
     </Box>
   );
 };

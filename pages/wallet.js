@@ -61,7 +61,7 @@ const WalletChild = ({ hasWallet, balance, balanceInDollars, ethAddress }) => {
   };
 
   return (
-    <Box pos="relative" minH="100vh" bg="#FBFDFF">
+    <Box pos="relative" minH="80vh" bg="#FBFDFF">
       <DashboardNavbar />
       <Box pt="56px" pos="relative" mt="224px">
         {!showWallet && (
