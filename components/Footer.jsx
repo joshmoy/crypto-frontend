@@ -14,7 +14,7 @@ const Footer = () => {
         <Flex>
           <Link href="/">
             <Text fontFamily="poppins" color="brand.dark" fontSize="14px">
-              Sell/Receive crypto
+              Send/Receive crypto
             </Text>
           </Link>
           {session ? (

@@ -18,7 +18,7 @@ const Navbar = () => {
               color="#fff"
               fontSize="15px"
             >
-              Sell/Receive crypto
+              Send/Receive crypto
             </Text>
           </Link>
           <Link href="/auth">

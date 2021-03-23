@@ -112,13 +112,22 @@ export default Transactions;
 
 export async function getServerSideProps({ req }) {
   const session = await getSession({ req });
-  const {
-    data: { data },
-  } = await getTx(session.user.token);
-
-  return {
-    props: {
-      data,
-    },
-  };
+  try {
+    const {
+      data: { data },
+    } = await getTx(session.user.token);
+  
+    return {
+      props: {
+        data,
+      },
+    };
+  } catch (error) {
+    return {
+      props: {
+        data: null,
+        ...error
+      },
+    };
+  }
 }

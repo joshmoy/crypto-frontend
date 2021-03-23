@@ -4,7 +4,7 @@ const handleError = (err) => {
   } else {
     const message = err.response?.data?.message || "Something went wrong";
 
-    throw new Error(message);
+    return null
   }
 };
 
