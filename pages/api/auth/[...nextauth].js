@@ -6,14 +6,18 @@ export default NextAuth({
   providers: [
     Providers.Credentials({
       async authorize({ login_details, password }) {
-        const { data } = await Axios.post("users/login", { login_details, password });
+        try {
+          const { data } = await Axios.post("users/login", { login_details, password });
 
-        if (data) {
-          const user = { ...data.data, token: data.data.token };
-          return user;
+          if (data) {
+            const user = { ...data.data, token: data.data.token };
+            return user;
+          }
+
+          return null
+        } catch (error) {
+          return null
         }
-
-        throw "/auth";
       },
     }),
   ],
@@ -25,6 +29,6 @@ export default NextAuth({
     session: async (session, user) => {
       session.user = user.user;
       return session;
-    },
+    }
   },
 });

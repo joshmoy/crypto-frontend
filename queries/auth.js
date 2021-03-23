@@ -9,6 +9,8 @@ const signUp = async (body) => {
 const login = async (body) => {
   const { data } = await instance.post("users/login", body);
 
+  console.log(data)
+
   return data;
 };
 
